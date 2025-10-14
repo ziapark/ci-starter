@@ -55,7 +55,24 @@
             </tr>
         </thead>
         <tbody>
-
+            <?php if (!empty($board)) : ?>
+                <?php foreach ($board as $row): ?>
+                    <tr>
+                        <td><?php echo $row->b_num; ?></td>
+                        <td>
+                            <a href="boardView.php?id=<?php echo $row->b_num; ?>">
+                                <?php echo htmlspecialchars($row->b_title); ?>
+                            </a>
+                        </td>
+                        <td><?php echo htmlspecialchars($row->u_num); ?></td>
+                        <td><?php echo $row->b_date; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="4">게시글이 없습니다.</td>
+                </tr>
+            <?php endif; ?>
         </tbody>
     </table>
     <div class="pagination">
