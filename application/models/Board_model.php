@@ -8,7 +8,7 @@
             parent::__construct;
         }
 
-        function get_list($table = 'ci_board'){
+        function get_list($table = 'board'){
             $sql="select * from $table order by board_id desc";
             $query = $this->db->query($sql);
             $result =  $query->result();

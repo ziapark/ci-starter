@@ -31,7 +31,7 @@
         ?>
         <a href="login.php">로그인</a>
         <?php }else{ ?>
-        <a href="logout">로그아웃</a>
+        <a href="logout">로그아웃</a>```
         <?php } ?>  
     </div>
 
@@ -56,35 +56,6 @@
         </thead>
         <tbody>
 
-
-            <?php
-                $host = "localhost";
-                $dbname = "ci_board";
-                $username = "root";
-                $password = "";
-
-                $conn = new mysqli($host, $username);
-
-                if ($conn->connect_error) {
-                    die("연결 실패: " . $conn->connect_error);
-                }
-
-                $sql = "SELECT * FROM board ORDER BY b_num DESC";
-                $result = $conn->query($sql);
-                $count = 0;
-
-                if (!empty($list)):
-                    foreach ($list as $result):?>
-                        <tr>
-                            <td><?= $row->b_num ?></td>
-                            <td><?= $row->title ?></td>
-                        </tr>
-                    <?php endforeach;
-                        else: ?>
-                    <tr><td colspan="5">게시글이 없습니다.</td></tr>
-                <?php endif;
-
-                $conn->close();?>
         </tbody>
     </table>
     <div class="pagination">

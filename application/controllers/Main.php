@@ -11,7 +11,15 @@ class Main extends MY_Controller
 
     public function index()
     {
-        $this->load->view('boardList');
+        //$this->load->view('boardList');
+        $query = $this->db->query('
+            select * from user;
+        ');
+
+        $result = $query->result();
+
+        echo json_encode($result);
+
     }
 
     public function boardList()

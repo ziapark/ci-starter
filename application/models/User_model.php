@@ -15,6 +15,6 @@
             $this->u_pw = $_POST['u_pw'];
             $this->u_name = $_POST['u_name'];
 
-            $this->db->insert('ci_board', $this);
+            $this->db->insert('board', $this);
         }
     }   
