@@ -15,6 +15,8 @@
         .signup-button:hover {background-color: #218838;}
         .extra-links {text-align: center;margin-top: 15px;}
         .extra-links a {color: #6c6f74ff;text-decoration: none;font-size: 14px;}
+    
+    
     </style>
 </head>
 <body>
