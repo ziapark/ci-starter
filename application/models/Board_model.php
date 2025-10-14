@@ -3,7 +3,7 @@
         exit('No direct script access allowed');
     }
 
-    class Board_m extends CI_Model{
+    class Board_model extends CI_Model{
         function __construct(){
             parent::__construct;
         }

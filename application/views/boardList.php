@@ -11,8 +11,8 @@
         .top-bar a {padding: 8px 16px;font-size: 14px;background-color: #007BFF;color: white;border: none;border-radius: 4px;cursor: pointer;}
         .action-bar {display: flex;justify-content: space-between;align-items: center;margin-bottom: 20px;}
         .search-box input[type="text"] {padding: 8px 12px;font-size: 14px;border: 1px solid #ccc;border-radius: 4px;width: 200px;}
-        .write-button a {padding: 8px 16px;font-size: 14px;text-decoration: none;background-color: #007BFF;color: white;border: none;border-radius: 4px;cursor: pointer;}
-        .write-button a:hover, .top-bar a:hover {background-color: #0056b3;}
+        .write-button button {padding: 8px 16px;font-size: 14px;text-decoration: none;background-color: #007BFF;color: white;border: none;border-radius: 4px;cursor: pointer;}
+        .write-button button:hover, .top-bar a:hover {background-color: #0056b3;}
         table {width: 100%;border-collapse: collapse;background-color: white;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);}
         thead {background-color: #007BFF;color: white;}
         th, td {padding: 12px 16px;border-bottom: 1px solid #ddd;text-align: center;}
@@ -25,7 +25,14 @@
 </head>
 <body>
     <div class="top-bar">
-        <a href="login">로그인</a>
+        <?php
+        if(isset($_SESSION) === false) {session_start();}
+        if(isset($_SESSION['u_id']) === false){
+        ?>
+        <a href="login.php">로그인</a>
+        <?php }else{ ?>
+        <a href="logout">로그아웃</a>
+        <?php } ?>  
     </div>
 
     <h1>게시판</h1>
@@ -35,7 +42,7 @@
             <input type="text" placeholder="검색어를 입력하세요">
         </div>
         <div class="write-button">
-            <a href="boardAdd">글쓰기</a>
+            <button onclick="add()">글쓰기</button>
         </div>
     </div>
     <table>
@@ -89,5 +96,15 @@
         <a href="#">5</a>
         <a href="#">&raquo;</a>
     </div>
+    <script>
+            function add(){
+                <?php if(isset ($_SESSION['u_id']) === false){ ?>
+                    alert('로그인이 필요합니다.');
+                    location.href='login.php';
+                <?php }else{ ?>
+                    location.href='boardAdd.php';
+                <?php } ?>
+            }
+    </script>
 </body>
 </html>

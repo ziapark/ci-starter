@@ -22,24 +22,24 @@
 <body>
     <div class="signup-container">
         <h2>회원가입</h2>
-        <form>
+        <form action=".../sign_controller.php" method="post">
             <div class="form-group">
-                <label for="name">이름</label>
-                <input type="text" id="name" name="name" placeholder="이름을 입력하세요" required>
+                <label for="u_name">이름</label>
+                <input type="text" id="u_name" name="u_name" placeholder="이름을 입력하세요" required>
             </div>
             <div class="form-group">
-                <label for="username">아이디</label>
-                <input type="text" id="username" name="username" placeholder="아이디를 입력하세요" required>
+                <label for="u_id">아이디</label>
+                <input type="text" id="u_id" name="u_id" placeholder="아이디를 입력하세요" required>
             </div>
             <div class="form-group">
-                <label for="password">비밀번호</label>
-                <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+                <label for="u_pw">비밀번호</label>
+                <input type="password" id="u_pw" name="u_pw" placeholder="비밀번호를 입력하세요" required>
             </div>
             <button type="submit" class="signup-button">회원가입</button>
         </form>
         <div class="extra-links">
-            <a href="login">로그인 |</a>
-            <a href="boardList">목록보기</a>
+            <a href="./login">로그인 |</a>
+            <a href="./boardList">목록보기</a>
         </div>
     </div>
 </body>
