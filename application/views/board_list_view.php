@@ -64,8 +64,8 @@
                                 <?php echo htmlspecialchars($row->b_title); ?>
                             </a>
                         </td>
-                        <td><?php echo htmlspecialchars($row->u_num); ?></td>
-                        <td><?php echo $row->b_date; ?></td>
+                        <td><?php echo htmlspecialchars($row->u_id); ?></td>
+                        <td><?= date('Y-m-d', strtotime($row->b_date)); ?></td>
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
