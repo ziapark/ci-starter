@@ -39,7 +39,7 @@
                 <textarea id="b_content" name="b_content" placeholder="내용을 입력하세요" required></textarea>
             </div>
             <div class="button-group">
-                <a href="/board/view/board_list" class="cancel-btn">취소</a>
+                <a href="/board/board_list" class="cancel-btn">취소</a>
                 <button type="submit" class="submit-btn">등록</button>
             </div>
         </form>

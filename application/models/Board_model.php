@@ -1,14 +1,15 @@
 <?php
     class Board_model extends CI_Model{
 
-        public function get_board_list()
+        public function get_board_list($limit, $offset)
         {
             $query = $this->db->query('
                 select board.*, user.u_id
                 from board
                 join user on board.u_num = user.u_num
-                order by board.b_date desc;
-            ');
+                order by board.b_date desc
+                limit ? offset ?;
+            ', [$limit, $offset]);
 
             $result = $query->result();
             return $result;
@@ -18,7 +19,7 @@
         {
             return $this->db->count_all('board');
         }
-        
+
         public function get_user_id($u_num)
         {
             $query = $this->db->query('select u_id from user where u_num = ?', [$u_num]);

@@ -60,7 +60,7 @@
             <?php if (!empty($board)) : ?>
                 <?php foreach ($board as $index => $row): ?>
                     <tr>
-                        <td><?php echo $index + 1; ?></td>
+                        <td><?php echo (($current_page - 1) * $limit_per_page) + $index + 1; ?></td>
                         <td>
                             <a href="/board/board_detail/<?php echo $row->b_num; ?>">
                                 <?php echo htmlspecialchars($row->b_title); ?>
@@ -78,13 +78,15 @@
         </tbody>
     </table>
     <div class="pagination">
-        <a href="#">&laquo;</a>
-        <a href="#">1</a>
-        <a href="#" class="active">2</a>
-        <a href="#">3</a>
-        <a href="#">4</a>
-        <a href="#">5</a>
-        <a href="#">&raquo;</a>
+        <?php
+        for ($i = 1; $i <= $total_pages; $i++) {
+            if ($i == $current_page) {
+                echo '<a href="#" class="active">' . $i . '</a>';
+            } else {
+                echo '<a href="' . site_url('board/board_list/' . $i) . '">' . $i . '</a>';
+            }
+        }
+        ?>
     </div>
     <script>
             function add(){

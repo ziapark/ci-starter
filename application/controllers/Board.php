@@ -9,7 +9,19 @@
         //게시판 목록
         public function board_list()
         {
-            $data['board'] = $this->Board_model->get_board_list();
+            $limit_per_page = 10;
+            $total_rows = $this->Board_model->count_all_boards();
+
+            $current_page = ($this->uri->segment(3)) ? $this->uri->segment(3):1;
+            $total_pages = ceil($total_rows / $limit_per_page);
+            
+            $offset = ($current_page - 1) * $limit_per_page;
+
+            $data['board'] = $this->Board_model->get_board_list($limit_per_page, $offset);           
+            $data['total_pages'] = $total_pages;
+            $data['current_page'] = $current_page;
+            $data['limit_per_page'] = $limit_per_page;
+
             $this->load->view('board_list_view', $data);            
         }
 
@@ -29,7 +41,7 @@
             $b_content = $_POST['b_content'];
 
             $data = $this->Board_model->insert_board($u_num, $b_title, $b_content);
-            redirect('board/view/board_list');
+            redirect('board/board_list');
         }
 
         //게시글 상세
