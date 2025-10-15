@@ -15,11 +15,22 @@
         .signup-button:hover {background-color: #218838;}
         .extra-links {text-align: center;margin-top: 15px;}
         .extra-links a {color: #6c6f74ff;text-decoration: none;font-size: 14px;}
-    
-    
+        .check-button {padding: 10px 12px;background-color: #007bff;border: none;color: white;border-radius: 6px;cursor: pointer;font-size: 14px;}
+        .check-button:hover {background-color: #0056b3;}
     </style>
 </head>
 <body>
+    <script>
+        function checkDuplicate(){
+            //비동기 전송 필요
+            <?php if(isset ($_SESSION['u_num']) === false){ ?>
+                alert('로그인이 필요합니다.');
+                location.href='/user/view/login';
+            <?php }else{ ?>
+                location.href='/board/view/board_insert';
+            <?php } ?>
+        }
+    </script>
     <div class="signup-container">
         <h2>회원가입</h2>
         <form action="../sign" method="post">
@@ -30,6 +41,7 @@
             <div class="form-group">
                 <label for="u_id">아이디</label>
                 <input type="text" id="u_id" name="u_id" placeholder="아이디를 입력하세요" required>
+                <button type="button" class="check-button" onclick="checkDuplicate()">중복 확인</button>
             </div>
             <div class="form-group">
                 <label for="u_pw">비밀번호</label>
