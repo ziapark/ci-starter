@@ -11,40 +11,7 @@ class Main extends MY_Controller
 
     public function index()
     {
-        //$this->load->view('boardList');
-        $query = $this->db->query('
-            select * from user;
-        ');
-
-        $result = $query->result();
-
-        echo json_encode($result);
-
-    }
-
-    public function boardList()
-    {
-        $this->load->view('boardList');
-    }
-
-    public function boardDetail()
-    {
-        $this->load->view('boardDetail');
-    }
-
-    public function login()
-    {
-        $this->load->view('login');
-    }
-
-    public function sign()
-    {
-        $this->load->view('sign');
-    }
-
-    public function boardAdd()
-    {
-        $this->load->view('boardAdd');
+        redirect('board/view/board_list');
     }
 }
 ?>

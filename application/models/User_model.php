@@ -1,20 +1,25 @@
 <?php
     class User_model extends CI_Model{
-        public $u_id;
-        public $u_pw;
-        public $u_name;
-
-        public function __construct()
+        //회원가입
+        public function sign($u_id, $u_pw, $u_name)
         {
-            parent::__construct();
+            $query = "insert into user(u_id, u_pw, u_name) values (?, ?, ?)";
+            $this->db->query($query, array($u_id, $u_pw, $u_name));
+
+            return ;
         }
 
-        public function sign()
+        //로그인
+        public function login($u_id, $u_pw)
         {
-            $this->u_id = $_POST['u_id'];
-            $this->u_pw = $_POST['u_pw'];
-            $this->u_name = $_POST['u_name'];
+            $sql = "select * from user where u_id=?";
+            $query = $this->db->query($sql, array($u_id));
+            $user = $query->row();
 
-            $this->db->insert('board', $this);
+            if ($user && $u_pw === $user->u_pw) {
+                return $user;
+            } else {
+                return false;
+            }        
         }
     }   

@@ -20,20 +20,20 @@
 <body>
     <div class="login-container">
         <h2>로그인</h2>
-        <form>
+        <form action="/user/login" method="post">
             <div class="form-group">
-                <label for="username">아이디</label>
-                <input type="text" id="username" name="username" placeholder="아이디를 입력하세요">
+                <label for="u_id">아이디</label>
+                <input type="text" id="u_id" name="u_id" placeholder="아이디를 입력하세요">
             </div>
             <div class="form-group">
-                <label for="password">비밀번호</label>
-                <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요">
+                <label for="u_pw">비밀번호</label>
+                <input type="password" id="u_pw" name="u_pw" placeholder="비밀번호를 입력하세요">
             </div>
             <button type="submit" class="login-button">로그인</button>
         </form>
         <div class="extra-links">
-            <a href="sign">회원가입 |</a>
-            <a href="boardList">목록보기</a>
+            <a href="/user/view/sign">회원가입 |</a>
+            <a href="/board/view/board_list">목록보기</a>
         </div>
     </div>
 </body>

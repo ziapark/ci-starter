@@ -24,21 +24,22 @@
 <body>
     <div class="write-container">
         <h2>게시글 작성</h2>
-        <form>
+        <form action="/board/insert" method="post">
+            <input type="hidden" id="u_num" name="u_num" value="<?= htmlspecialchars($u_num) ?>">
             <div class="form-group">
-                <label for="writer">작성자</label>
-                <input type="text" id="writer" name="writer" placeholder="작성자 이름을 입력하세요" required>
+                <label for="u_id">작성자</label>
+                <input type="text" id="u_id" name="u_id" value="<?= htmlspecialchars($u_id) ?>" readonly>
             </div>
             <div class="form-group">
-                <label for="title">제목</label>
-                <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required>
+                <label for="b_title">제목</label>
+                <input type="text" id="b_title" name="b_title" placeholder="제목을 입력하세요" required>
             </div>
             <div class="form-group">
-                <label for="content">내용</label>
-                <textarea id="content" name="content" placeholder="내용을 입력하세요" required></textarea>
+                <label for="b_content">내용</label>
+                <textarea id="b_content" name="b_content" placeholder="내용을 입력하세요" required></textarea>
             </div>
             <div class="button-group">
-                <a href="boardList" class="cancel-btn">취소</a>
+                <a href="/board/view/board_list" class="cancel-btn">취소</a>
                 <button type="submit" class="submit-btn">등록</button>
             </div>
         </form>

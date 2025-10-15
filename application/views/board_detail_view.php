@@ -11,7 +11,7 @@
         .detail-meta {font-size: 14px;color: #666;margin-bottom: 20px;border-bottom: 1px solid #ddd;padding-bottom: 10px;}
         .detail-content {font-size: 16px;line-height: 1.6;color: #444;white-space: pre-line;margin-bottom: 30px;}
         .button-group {display: flex;justify-content: flex-end;gap: 10px;}
-        .button-group button {padding: 10px 16px;font-size: 14px;border: none;border-radius: 6px;cursor: pointer;}
+        .button-group a {padding: 10px 16px;font-size: 14px;border: none;border-radius: 6px;cursor: pointer;text-decoration-line: none;}
         .edit-btn {background-color: #28a745;color: white;}
         .edit-btn:hover {background-color: #218838;}
         .delete-btn {background-color: #dc3545;color: white;}
@@ -22,17 +22,24 @@
 </head>
 <body>
     <div class="detail-container">
-        <div class="detail-title">게시글 제목</div>
+        <div class="detail-title"><?= htmlspecialchars($board->b_title) ?></div>
         <div class="detail-meta">
-            작성자: 홍길동 | 작성일: 2025-10-14
+            작성자: <?= htmlspecialchars($board->u_id) ?> | 작성일: <?= date('Y-m-d', strtotime($board->b_date)) ?>
         </div>
         <div class="detail-content">
-            게시글 본문 내용
+            <?= nl2br(htmlspecialchars($board->b_content)) ?>
         </div>
         <div class="button-group">
-            <button class="edit-btn">수정</button>
-            <button class="delete-btn">삭제</button>
-            <button class="list-btn" onclick="location.href='boardList'">목록</button>
+            <?php
+                $login_u_num = $this->session->userdata('u_num');
+                if (!is_null($login_u_num) && $login_u_num == $board->u_num):
+            ?>
+                <div class="button-group">
+                    <a class="edit-btn" href="/board/update_view/<?= htmlspecialchars($board->b_num) ?>">수정</a>
+                    <a class="delete-btn" href="/board/delete/<?= htmlspecialchars($board->b_num) ?>">삭제</a>
+                </div>
+            <?php endif; ?>
+            <a class="list-btn" href="/board/view/board_list">목록</a>
         </div>
     </div>
 </body>

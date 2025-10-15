@@ -22,7 +22,7 @@
 <body>
     <div class="signup-container">
         <h2>회원가입</h2>
-        <form action=".../sign_controller.php" method="post">
+        <form action="../sign" method="post">
             <div class="form-group">
                 <label for="u_name">이름</label>
                 <input type="text" id="u_name" name="u_name" placeholder="이름을 입력하세요" required>
@@ -38,8 +38,8 @@
             <button type="submit" class="signup-button">회원가입</button>
         </form>
         <div class="extra-links">
-            <a href="./login">로그인 |</a>
-            <a href="./boardList">목록보기</a>
+            <a href="/user/view/login">로그인 |</a>
+            <a href="/board/view/board_list">목록보기</a>
         </div>
     </div>
 </body>
