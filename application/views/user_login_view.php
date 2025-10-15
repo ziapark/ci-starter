@@ -33,7 +33,7 @@
         </form>
         <div class="extra-links">
             <a href="/user/view/sign">회원가입 |</a>
-            <a href="/board/view/board_list">목록보기</a>
+            <a href="/board/board_list">목록보기</a>
         </div>
     </div>
 </body>

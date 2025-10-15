@@ -6,20 +6,19 @@
             $this->load->model('Board_model');
         }
 
-        //화면출력
-        public function view($value)
+        //게시판 목록
+        public function board_list()
         {
-            if($value === 'board_list'){
-                $limit = 10;
-                $offset = 
-                
-                $data['board'] = $this->Board_model->get_board_list();
-                $this->load->view('board_list_view', $data);
-            }else if($value === 'board_insert'){
-                $u_num = $this->session->userdata('u_num');
-                $u_id = $this->Board_model->get_user_id($u_num);
-                $this->load->view('board_insert_view', ['u_num' => $u_num, 'u_id' => $u_id]);
-            }
+            $data['board'] = $this->Board_model->get_board_list();
+            $this->load->view('board_list_view', $data);            
+        }
+
+        //게시글 작성 페이지
+        public function insert_view()
+        {
+            $u_num = $this->session->userdata('u_num');
+            $u_id = $this->Board_model->get_user_id($u_num);
+            $this->load->view('board_insert_view', ['u_num' => $u_num, 'u_id' => $u_id]);
         }
 
         //게시글 작성

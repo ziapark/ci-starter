@@ -11,7 +11,7 @@ class Main extends MY_Controller
 
     public function index()
     {
-        redirect('board/view/board_list');
+        redirect('board/board_list');
     }
 }
 ?>

@@ -39,7 +39,7 @@
                 $this->load->library('session');
                 $this->session->set_userdata('u_num', $data->u_num);
 
-                redirect('board/view/board_list');
+                redirect('board/board_list');
             }else{
                 redirect('user/view/login');
             }
@@ -49,7 +49,7 @@
         public function logout()
         {
             $this->session->sess_destroy();
-            redirect('board/view/board_list');
+            redirect('board/board_list');
         }
     }
 ?>

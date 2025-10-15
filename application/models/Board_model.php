@@ -14,6 +14,11 @@
             return $result;
         }
 
+        public function count_all_boards()
+        {
+            return $this->db->count_all('board');
+        }
+        
         public function get_user_id($u_num)
         {
             $query = $this->db->query('select u_id from user where u_num = ?', [$u_num]);

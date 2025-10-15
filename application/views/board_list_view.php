@@ -92,7 +92,7 @@
                     alert('로그인이 필요합니다.');
                     location.href='/user/view/login';
                 <?php }else{ ?>
-                    location.href='/board/view/board_insert';
+                    location.href='/board/insert_view';
                 <?php } ?>
             }
     </script>

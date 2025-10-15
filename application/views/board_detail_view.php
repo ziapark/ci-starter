@@ -39,7 +39,7 @@
                     <a class="delete-btn" href="/board/delete/<?= htmlspecialchars($board->b_num) ?>">삭제</a>
                 </div>
             <?php endif; ?>
-            <a class="list-btn" href="/board/view/board_list">목록</a>
+            <a class="list-btn" href="/board/board_list">목록</a>
         </div>
     </div>
 </body>

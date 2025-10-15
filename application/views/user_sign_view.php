@@ -51,7 +51,7 @@
         </form>
         <div class="extra-links">
             <a href="/user/view/login">로그인 |</a>
-            <a href="/board/view/board_list">목록보기</a>
+            <a href="/board/board_list">목록보기</a>
         </div>
     </div>
 </body>
