@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>게시글 상세보기</title>
     <style>
         body {margin: 0;padding: 40px 20px;display: flex;justify-content: center;}
@@ -18,10 +19,25 @@
         .delete-btn:hover {background-color: #c82333;}
         .list-btn {background-color: #6c757d;color: white;}
         .list-btn:hover {background-color: #495057;}
+        hr {margin: 40px 0 20px; background: #ddd; height:1px; border:0;}
+        #comment-list {margin-top: 20px;} 
+        .comment {border-bottom: 1px solid #ddd; padding: 10px 0;} 
+        .comment-header {font-size: 14px; color: #555;display: flex;justify-content: space-between;align-items: center;} 
+        .comment p {margin: 5px 0 10px; font-size: 15px; color: #333;}
+        .reply-action-group {display: flex;gap: 6px;align-items: center;margin-left: auto;
+}
+        .reply-toggle-btn {background: none; color: #007bff; border: none; font-size: 13px; cursor: pointer; padding: 0;} 
+        .reply-toggle-btn:hover {text-decoration: underline;} 
+        .reply-form, .comment-form {margin-top: 10px;} 
+        .reply-form textarea, .comment-form textarea, textarea {width: 97%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;} 
+        .reply-form button, .comment-form button {margin-top: 5px; background-color: #007bff; color: white; border: none; padding: 8px 14px; border-radius: 4px; cursor: pointer;} 
+        .reply-form button:hover, .comment-form button:hover {background-color: #0056b3;} 
+        .login-comment-info {color: #888; margin-top: 20px;}
     </style>
 </head>
 <body>
     <div class="detail-container">
+        <!-- 게시글 정보 -->
         <div class="detail-title"><?= htmlspecialchars($board->b_title) ?></div>
         <div class="detail-meta">
             작성자: <?= htmlspecialchars($board->u_id) ?> | 작성일: <?= date('Y-m-d', strtotime($board->b_date)) ?>
@@ -29,6 +45,118 @@
         <div class="detail-content">
             <?= nl2br(htmlspecialchars($board->b_content)) ?>
         </div>
+
+        <!-- 댓글 정보 -->
+        <hr>
+        <h3>댓글</h3>
+        <div id="comment-list">
+            <?php if (!empty($comments)): ?>
+                <?php foreach ($comments as $comment): ?>
+                    <div class="comment" style="margin-left: <?= $comment->c_depth * 20 ?>px;">
+                        <div class="comment-header">
+                            <strong><?= htmlspecialchars($comment->u_id) ?></strong>
+                            <span>(<?= date('Y-m-d H:i', strtotime($comment->c_date)) ?>)</span>
+                            <div class="reply-action-group">
+                                <?php if ($this->session->userdata('u_num')): ?>
+                                    <button class="reply-toggle-btn" onclick="toggleReplyForm(<?= $comment->c_num ?>)">답글 쓰기 |</button>
+                                <?php endif; ?>
+                                <button id= "reply_list" class="reply-toggle-btn" onclick="replay_list(<?= $board->b_num ?>, <?= $comment->c_num ?>, <?= $comment->c_depth ?>)">답글 보기</button>
+                            </div>
+                        </div>
+                        <p><?= nl2br(htmlspecialchars($comment->c_content)) ?></p>
+
+                        <!-- 대댓글 입력 폼 -->
+                        <form id="reply_comment_form_<?= $comment->c_num ?>" class="reply-form" style="display:none;">
+                            <input type="hidden" id="b_num" name="b_num" value=<?= $board->b_num ?>>
+                            <input type="hidden" id="c_parent" name="c_parent" value="<?= $comment->c_num ?>">
+                            <input type="hidden" id="c_depth" name="c_depth" value="<?= $comment->c_depth + 1 ?>">
+                            <textarea id="c_content" name="c_content" rows="2" placeholder="답글을 입력하세요"></textarea>
+                            <button type="submit">등록</button>
+                            <button type="button" class="reply-toggle-btn" style="background: #6c757d; text-decoration-line: none;" onclick="toggleReplyForm(<?= $comment->c_num ?>)">취소</button>
+                        </form>
+                        
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>댓글이 없습니다.</p>
+            <?php endif; ?>
+        </div>
+
+        <!-- 최상위 댓글 작성 -->
+        <?php if ($this->session->userdata('u_num')): ?>
+            <form id="first_comment_form" class="comment-form">
+                <input type="hidden" id="b_num" name="b_num" value=<?= $board->b_num ?>>
+                <textarea id="c_content" name="c_content" rows="3" placeholder="댓글을 입력하세요"></textarea>
+                <button type="submit">댓글 등록</button>
+            </form>
+        <?php else: ?>
+            <textarea name="c_content" rows="3" placeholder="댓글을 작성하려면 로그인이 필요합니다." disabled></textarea>
+        <?php endif; ?>
+
+        <script>
+            //댓글 작성
+            $('#first_comment_form').on('submit', function(e){
+                e.preventDefault();
+
+                const b_num = $('#b_num').val();
+                const c_content = $('#c_content').val().trim();
+
+                submit_comment_ajax(b_num, c_content, 0, 0);
+            });
+
+            //답글 작성
+            $('.reply-form').on('submit', function(e){
+                e.preventDefault();
+
+                const b_num = $('#b_num').val();
+                const c_content = $('#c_content').val().trim();
+                const c_parent = $('#c_parent').val();
+                const c_depth = $('#c_depth').val();
+
+                submit_comment_ajax(b_num, c_content, c_depth, c_parent);
+            });
+
+            //답글 보기
+            function reply_list(b_num, c_num, b_depth){
+
+            }
+
+            //비동기 전송
+            function submit_comment_ajax(b_num, c_content, c_depth, c_parent){
+                if(!c_content){
+                    alert('댓글을 입력하세요');
+                    return;
+                }
+
+                $.ajax({
+                    url: '/comment/insert_comment',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        b_num: b_num,
+                        c_content: c_content,
+                        c_depth: c_depth,
+                        c_parent: c_parent
+                    },
+                    success: function(data){
+                        if(data.success){
+                            location.reload();
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
+            }
+            function toggleReplyForm(c_num) {
+                const form = document.getElementById('reply_comment_form_' + c_num);
+                if (form.style.display === 'none') {
+                    form.style.display = 'block';
+                } else {
+                    form.style.display = 'none';
+                }
+            }
+        </script>
+
         <div class="button-group">
             <?php
                 $login_u_num = $this->session->userdata('u_num');
@@ -39,7 +167,7 @@
                     <a class="delete-btn" href="/board/delete/<?= htmlspecialchars($board->b_num) ?>">삭제</a>
                 </div>
             <?php endif; ?>
-            <a class="list-btn" href="/board/board_list">목록</a>
+            <a class="list-btn" href="/board/board_list?limit_per_page=<?= $limit_per_page ?>&keyword=<?= $keyword ?>">목록</a>
         </div>
     </div>
 </body>

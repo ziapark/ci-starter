@@ -9,6 +9,9 @@
         h1 {text-align: center;color: #333;margin-bottom: 30px;}
         .action-bar {display: flex;justify-content: space-between;align-items: center;margin-bottom: 20px;}
         .search-box input[type="text"] {padding: 8px 12px;font-size: 14px;border: 1px solid #ccc;border-radius: 4px;width: 200px;}
+        .limit-box {display: flex;align-items: center;gap: 8px;}
+        .limit-box input[type="text"] {padding: 8px 12px;font-size: 14px;border: 1px solid #ccc;border-radius: 4px;width: 200px;}
+        
         .write-button{padding: 8px 16px;font-size: 14px;text-decoration: none;background-color: #007BFF;color: white;border: none;border-radius: 4px;cursor: pointer;}
         .write-button:hover{background-color: #0056b3;}
         table {width: 100%;border-collapse: collapse;background-color: white;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);}
@@ -16,7 +19,8 @@
         th, td {padding: 12px 16px;border-bottom: 1px solid #ddd;text-align: center;}
         tbody tr:hover {background-color: #f1f1f1;}
         a {color: #007BFF;text-decoration: none;}
-        .pagination {margin-top: 30px;display: flex;justify-content: center;gap: 8px;}
+        .pagination-container{display: flex; justify-content: space-between; align-items: center; margin-top: 30px;}
+        .pagination {display: flex; justify-content: left; gap: 8px; flex: 1;}
         .pagination a {padding: 8px 12px;background-color: #eee;border-radius: 4px;color: #333;text-decoration: none;font-size: 14px;}
         .pagination a.active {background-color: #007BFF;color: white;}
         .right-action {display: flex;gap: 10px;}
@@ -30,7 +34,7 @@
     <h1>게시판</h1>
 
     <div class="action-bar">
-        <form method="get" action="/board/search" class="search-box">
+        <form method="get" action="/board/board_list?limit_per_page=<?= $limit_per_page ?>" class="search-box">
             <input type="text" name="keyword" placeholder="검색어를 입력하세요">
             <button type="submit" class="search-button">검색</button>
         </form>
@@ -62,7 +66,7 @@
                     <tr>
                         <td><?php echo (($current_page - 1) * $limit_per_page) + $index + 1; ?></td>
                         <td>
-                            <a href="/board/board_detail/<?php echo $row->b_num; ?>">
+                            <a href="/board/board_detail/<?php echo $row->b_num; ?>?limit_per_page=<?= $limit_per_page ?>&keyword=<?= $keyword ?>">
                                 <?php echo htmlspecialchars($row->b_title); ?>
                             </a>
                         </td>
@@ -77,16 +81,31 @@
             <?php endif; ?>
         </tbody>
     </table>
-    <div class="pagination">
-        <?php
-        for ($i = 1; $i <= $total_pages; $i++) {
-            if ($i == $current_page) {
-                echo '<a href="#" class="active">' . $i . '</a>';
-            } else {
-                echo '<a href="' . site_url('board/board_list/' . $i) . '">' . $i . '</a>';
-            }
-        }
-        ?>
+    <div class="pagination-container">
+        <div style="flex: 1;"></div>
+
+        <div class="pagination">
+            <?php if ($prev): ?>
+                <a style="background-color: ##dfdfdf;" href="/board/board_list?current_page=<?= ($current_page - 1 )?>&limit_per_page=<?= $limit_per_page ?>">이전</a>
+            <?php endif; ?>
+
+            <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
+                <?php if ($i == $current_page): ?>
+                    <a href="#" class="active"><?= $i ?></a>
+                <?php else: ?>
+                    <a href="/board/board_list?current_page=<?= $i ?>&limit_per_page=<?= $limit_per_page ?>"><?= $i ?></a>
+                <?php endif; ?>
+            <?php endfor; ?>
+        
+            <?php if ($next): ?>
+                <a style="background-color: ##dfdfdf;" href="/board/board_list?current_page=<?= ($current_page + 1) ?>&limit_per_page=<?= $limit_per_page ?>">다음</a>
+            <?php endif; ?>
+        </div>
+
+        <form method="get" action="/board/board_list" class="limit-box">
+            <input type="text" name="limit_per_page" placeholder="게시글 개수를 입력하세요">
+            <button type="submit" class="search-button">출력</button>
+        </form>
     </div>
     <script>
             function add(){

@@ -39,7 +39,7 @@
                 <textarea id="b_content" name="b_content" required><?= htmlspecialchars($board->b_content) ?></textarea>
             </div>
             <div class="button-group">
-                <a href="/board/view/board_list" class="cancel-btn">취소</a>
+                <a href="/board/board_list" class="cancel-btn">취소</a>
                 <button type="submit" class="submit-btn">수정</button>
             </div>
         </form>

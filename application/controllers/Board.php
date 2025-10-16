@@ -4,24 +4,49 @@
         {
             parent::__construct();
             $this->load->model('Board_model');
+            $this->load->model('Comment_model');
         }
 
         //게시판 목록
         public function board_list()
         {
-            $limit_per_page = 10;
-            $total_rows = $this->Board_model->count_all_boards();
+            $limit_per_page = isset($_GET['limit_per_page']) && is_numeric($_GET['limit_per_page']) ? (int)$_GET['limit_per_page'] : 10;    //한 페이지당 게시글 수
 
-            $current_page = ($this->uri->segment(3)) ? $this->uri->segment(3):1;
-            $total_pages = ceil($total_rows / $limit_per_page);
+            $total_rows = $this->Board_model->count_all_boards();   //전체 게시글 수
+
+            $current_page = isset($_GET['current_page']) && is_numeric($_GET['current_page']) && $_GET['current_page'] > 0 ? (int)$_GET['current_page'] : 1;    //현재 페이지
+            $total_pages = ceil($total_rows / $limit_per_page);     //전체 페이지
             
-            $offset = ($current_page - 1) * $limit_per_page;
+            $limit_page = 5;    //표시될 페이지 수       
+            $end_page = ceil($current_page/$limit_page) * $limit_page;      //마지막 페이지 번호
+            if($total_pages < $end_page){
+                $end_page = $total_pages;
+            }
+            $start_page = ($end_page - $limit_page) + 1;    //시작 페이지 번호
+            if($start_page < 1){
+                $start_page = 1;
+            }
+            $prev = ($current_page == 1) ? false : true;
+            $next = ($current_page == $total_pages) ? false : true;
 
-            $data['board'] = $this->Board_model->get_board_list($limit_per_page, $offset);           
+            $offset = ($current_page - 1) * $limit_per_page;    //게시글 시작
+
+            $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';   //검색키워드
+            if ($keyword !== '') {
+                $data['board'] = $this->Board_model->search($keyword, $limit_per_page, $offset);
+            } else {
+                $data['board'] = $this->Board_model->get_board_list($limit_per_page, $offset);
+            }
+
             $data['total_pages'] = $total_pages;
             $data['current_page'] = $current_page;
             $data['limit_per_page'] = $limit_per_page;
-
+            $data['start_page'] = $start_page;
+            $data['end_page'] = $end_page;
+            $data['prev'] = $prev;
+            $data['next'] = $next;
+            $data['keyword'] = $keyword;
+            
             $this->load->view('board_list_view', $data);            
         }
 
@@ -47,7 +72,14 @@
         //게시글 상세
         public function board_detail($b_num)
         {
+            $limit_per_page = isset($_GET['limit_per_page']) && is_numeric($_GET['limit_per_page']) ? (int)$_GET['limit_per_page'] : 10; 
+            $data['limit_per_page'] = $limit_per_page;
+            $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
+            $data['keyword'] = $keyword;
+
             $data['board'] = $this->Board_model->get_board_detail($b_num);
+            $data['comments'] = $this->Comment_model->get_comments($b_num);
+
             $this->load->view('board_detail_view', $data);
         }
 
@@ -55,16 +87,17 @@
         public function delete($b_num)
         {
             $this->Board_model->delete($b_num);
-            redirect('board/view/board_list');
+            redirect('board/board_list');
         }
 
-        //게시글 수정
+        //게시글 수정 폼
         public function update_view($b_num)
         {
             $data['board'] = $this->Board_model->get_board_detail($b_num);
             $this->load->view('board_update_view', $data);
         }
         
+        //게시글 수정
         public function update()
         {
             $b_num = $_POST['b_num'];
@@ -72,16 +105,7 @@
             $b_content = $_POST['b_content'];
 
             $data = $this->Board_model->update($b_num, $b_title, $b_content);
-            redirect('board/view/board_list');
-        }
-
-        //게시글 검색(title)
-        public function search()
-        {
-            $keyword = $_GET['keyword'];
-
-            $data['board'] = $this->Board_model->search($keyword);
-            $this->load->view('board_list_view', $data);
+            redirect('board/board_list');
         }
 
     }
