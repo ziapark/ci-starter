@@ -21,11 +21,10 @@
         .list-btn:hover {background-color: #495057;}
         hr {margin: 40px 0 20px; background: #ddd; height:1px; border:0;}
         #comment-list {margin-top: 20px;} 
-        .comment {border-bottom: 1px solid #ddd; padding: 10px 0;} 
+        .comment {border-bottom: 2px solid #ddd; padding: 10px 0;} 
         .comment-header {font-size: 14px; color: #555;display: flex;justify-content: space-between;align-items: center;} 
         .comment p {margin: 5px 0 10px; font-size: 15px; color: #333;}
-        .reply-action-group {display: flex;gap: 6px;align-items: center;margin-left: auto;
-}
+        .reply-action-group {display: flex;gap: 6px;align-items: center;margin-left: auto;}
         .reply-toggle-btn {background: none; color: #007bff; border: none; font-size: 13px; cursor: pointer; padding: 0;} 
         .reply-toggle-btn:hover {text-decoration: underline;} 
         .reply-form, .comment-form {margin-top: 10px;} 
@@ -33,6 +32,7 @@
         .reply-form button, .comment-form button {margin-top: 5px; background-color: #007bff; color: white; border: none; padding: 8px 14px; border-radius: 4px; cursor: pointer;} 
         .reply-form button:hover, .comment-form button:hover {background-color: #0056b3;} 
         .login-comment-info {color: #888; margin-top: 20px;}
+        .reply-list {border-top: 1px dashed #bbb; margin-top: 15px; padding-top: 10px;}
     </style>
 </head>
 <body>
@@ -52,28 +52,33 @@
         <div id="comment-list">
             <?php if (!empty($comments)): ?>
                 <?php foreach ($comments as $comment): ?>
-                    <div class="comment" style="margin-left: <?= $comment->c_depth * 20 ?>px;">
+                    <div class="comment">
                         <div class="comment-header">
                             <strong><?= htmlspecialchars($comment->u_id) ?></strong>
                             <span>(<?= date('Y-m-d H:i', strtotime($comment->c_date)) ?>)</span>
                             <div class="reply-action-group">
                                 <?php if ($this->session->userdata('u_num')): ?>
-                                    <button class="reply-toggle-btn" onclick="toggleReplyForm(<?= $comment->c_num ?>)">답글 쓰기 |</button>
+                                    <button class="reply-toggle-btn" onclick="toggle_reply_form(<?= $comment->c_num ?>)">답글 쓰기 |</button>
                                 <?php endif; ?>
-                                <button id= "reply_list" class="reply-toggle-btn" onclick="replay_list(<?= $board->b_num ?>, <?= $comment->c_num ?>, <?= $comment->c_depth ?>)">답글 보기</button>
+                                <button id= "reply_list" class="reply-toggle-btn" onclick="reply_list(<?= $board->b_num ?>, <?= $comment->c_num ?>, <?= $comment->c_depth + 1 ?>)">답글 보기</button>
                             </div>
                         </div>
                         <p><?= nl2br(htmlspecialchars($comment->c_content)) ?></p>
-
-                        <!-- 대댓글 입력 폼 -->
+                        
+                        <!-- 답글 입력 폼 -->
                         <form id="reply_comment_form_<?= $comment->c_num ?>" class="reply-form" style="display:none;">
                             <input type="hidden" id="b_num" name="b_num" value=<?= $board->b_num ?>>
                             <input type="hidden" id="c_parent" name="c_parent" value="<?= $comment->c_num ?>">
                             <input type="hidden" id="c_depth" name="c_depth" value="<?= $comment->c_depth + 1 ?>">
                             <textarea id="c_content" name="c_content" rows="2" placeholder="답글을 입력하세요"></textarea>
                             <button type="submit">등록</button>
-                            <button type="button" class="reply-toggle-btn" style="background: #6c757d; text-decoration-line: none;" onclick="toggleReplyForm(<?= $comment->c_num ?>)">취소</button>
+                            <button type="button" class="reply-toggle-btn" style="background: #6c757d; text-decoration-line: none;" onclick="toggle_reply_form(<?= $comment->c_num ?>)">취소</button>
                         </form>
+
+                        <!-- 답글 출력 -->
+                        <div id="reply_list_display_<?= $comment->c_num ?>" class="reply-list" style="display:none;"></div>
+
+
                         
                     </div>
                 <?php endforeach; ?>
@@ -82,7 +87,7 @@
             <?php endif; ?>
         </div>
 
-        <!-- 최상위 댓글 작성 -->
+        <!-- 댓글 작성 -->
         <?php if ($this->session->userdata('u_num')): ?>
             <form id="first_comment_form" class="comment-form">
                 <input type="hidden" id="b_num" name="b_num" value=<?= $board->b_num ?>>
@@ -105,21 +110,16 @@
             });
 
             //답글 작성
-            $('.reply-form').on('submit', function(e){
+            $(document).on('submit', '.reply-form', function(e){
                 e.preventDefault();
-
-                const b_num = $('#b_num').val();
-                const c_content = $('#c_content').val().trim();
-                const c_parent = $('#c_parent').val();
-                const c_depth = $('#c_depth').val();
+                const form = $(this);
+                const b_num = form.find('input[name="b_num"]').val();
+                const c_content = form.find('textarea[name="c_content"]').val().trim();
+                const c_parent = form.find('input[name="c_parent"]').val();
+                const c_depth = form.find('input[name="c_depth"]').val();
 
                 submit_comment_ajax(b_num, c_content, c_depth, c_parent);
             });
-
-            //답글 보기
-            function reply_list(b_num, c_num, b_depth){
-
-            }
 
             //비동기 전송
             function submit_comment_ajax(b_num, c_content, c_depth, c_parent){
@@ -147,13 +147,78 @@
                     }
                 });
             }
-            function toggleReplyForm(c_num) {
+
+            //답글 쓰기
+            function toggle_reply_form(c_num) {
                 const form = document.getElementById('reply_comment_form_' + c_num);
                 if (form.style.display === 'none') {
                     form.style.display = 'block';
                 } else {
                     form.style.display = 'none';
                 }
+            }
+
+            //답글 보기
+            function reply_list(b_num, p_num, b_depth){
+                $.ajax({
+                    url: '/comment/reply_list',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        b_num: b_num,
+                        p_num: p_num,
+                        b_depth: b_depth
+                    },
+                    success: function(data){
+                        if(data.success){
+                            //로그인 확인
+                            const isLoggedIn = <?= $this->session->userdata('u_num') ? 'true' : 'false' ?>;
+                            
+                            //답글 출력
+                            let list = document.getElementById('reply_list_display_' + p_num);
+                            list.innerHTML = '';
+
+                            data.reply_list.forEach(function(reply){
+                                let replyHTML = `
+                                    <div class="comment-header">                                                                     
+                                        <strong>${reply.u_id}</strong>
+                                        <span>(${reply.c_date})</span>
+                                        <div class="reply-action-group">
+                                `;
+
+                                if (isLoggedIn) {
+                                    replyHTML += `<button class="reply-toggle-btn" onclick="toggle_reply_form(${reply.c_num})" style="background: none; color: #007bff; padding: 0;">답글 쓰기 |</button>`;
+                                }
+
+                                replyHTML += `
+                                            <button id= "reply_list_${reply.c_num}" class="reply-toggle-btn" onclick="reply_list(${reply.b_num}, ${reply.c_num}, ${reply.c_depth + 1})" style="background: none; color: #007bff; padding: 0;">답글 보기</button>
+                                        </div>                                       
+                                    </div>
+                                    <p>${reply.c_content.replace(/\n/g, '<br>')}</p>
+                                    <form id="reply_comment_form_${reply.c_num}" class="reply-form" style="display:none;">
+                                        <input type="hidden" name="b_num" value=${reply.b_num}>
+                                        <input type="hidden" name="c_parent" value="${reply.c_num}">
+                                        <input type="hidden" name="c_depth" value="${reply.c_depth + 1}">
+                                        <textarea name="c_content" rows="2" placeholder="답글을 입력하세요"></textarea>
+                                        <button type="submit">등록</button>
+                                        <button type="button" class="reply-toggle-btn" style="background: #6c757d; text-decoration-line: none;" onclick="toggle_reply_form(${reply.c_num})">취소</button>
+                                    </form>
+                                    <div id="reply_list_display_${reply.c_num}" class="reply-list" style="display:none;"></div>
+                                `;
+
+                                list.innerHTML += replyHTML;
+                            });
+
+                            if (list.style.display === 'none') {
+                                list.style.display = 'block';
+                            } else {
+                                list.style.display = 'none';
+                            }
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
             }
         </script>
 

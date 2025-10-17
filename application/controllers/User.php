@@ -1,14 +1,12 @@
 <?php
     class User extends CI_Controller{
-        public function __construct()
-        {
+        public function __construct(){
             parent::__construct();
             $this->load->model('User_model');
         }
 
         //화면출력
-        public function view($value)
-        {
+        public function view($value){
             if($value === 'login'){
                 $this->load->view('user_login_view');
             }else if($value === 'sign'){
@@ -17,8 +15,7 @@
         }
 
         //회원가입
-        public function sign()
-        {
+        public function sign(){
             $u_id = $_POST['u_id'];
             $u_pw = $_POST['u_pw'];
             $u_name = $_POST['u_name'];
@@ -28,8 +25,7 @@
         }
 
         //로그인
-        public function login()
-        {
+        public function login(){
             $u_id = $_POST['u_id'];
             $u_pw = $_POST['u_pw'];
             
@@ -46,8 +42,7 @@
         }
 
         //로그아웃
-        public function logout()
-        {
+        public function logout(){
             $this->session->sess_destroy();
             redirect('board/board_list');
         }

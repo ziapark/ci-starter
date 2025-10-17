@@ -2,8 +2,7 @@
     class Comment_model extends CI_Model{
 
         //댓글 작성
-        public function insert_comment($b_num, $c_content, $u_num, $c_depth, $c_parent)
-        {
+        public function insert_comment($b_num, $c_content, $u_num, $c_depth, $c_parent){
             $result = $this->db->query('
                 insert into comment
                 (b_num, c_content, u_num, c_depth, c_parent)
@@ -14,8 +13,7 @@
         }
 
         //최상위 댓글 정보
-        public function get_comments($b_num)
-        {
+        public function get_comments($b_num){
             $query = $this->db->query('
                 select comment.*, user.u_id
                 from comment
@@ -28,6 +26,18 @@
             return $result;
         }
 
-        
+        //답글 정보
+        public function get_reply_list($b_num, $p_num, $b_depth){
+            $query = $this->db->query('
+                select comment.*, user.u_id
+                from comment
+                join user on comment.u_num = user.u_num
+                where comment.b_num = ? and comment.c_parent = ? and comment.c_depth = ?
+                order by comment.c_date;
+            ', [$b_num, $p_num, $b_depth]);
+
+            $result = $query->result();
+            return $result;
+        }   
     }
 ?>
