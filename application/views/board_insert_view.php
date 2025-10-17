@@ -10,9 +10,7 @@
         .write-container h2 {text-align: center;margin-bottom: 30px;color: #333;}
         .form-group {margin-bottom: 20px;}
         .form-group label {display: block;margin-bottom: 8px;font-weight: bold;color: #555;}
-        .form-group input[type="text"],
-        .form-group textarea {width: 100%;padding: 10px 12px;font-size: 14px;border: 1px solid #ccc;border-radius: 6px;resize: vertical;}
-        .form-group textarea {height: 200px;}
+        .form-group input[type="text"], .form-group textarea, .form-group select {width: 100%;padding: 10px 12px;font-size: 14px;border: 1px solid #ccc;border-radius: 6px;resize: vertical;background-color: white;}
         .button-group {display: flex;justify-content: flex-end;gap: 10px;margin-top: 20px;}
         .button-group button, .button-group a {padding: 10px 20px;font-size: 14px;border: none;border-radius: 6px;cursor: pointer;text-decoration: none;}
         .submit-btn {background-color: #28a745;color: white;}
@@ -35,8 +33,16 @@
                 <input type="text" id="b_title" name="b_title" placeholder="제목을 입력하세요" required>
             </div>
             <div class="form-group">
+                <label for="b_title">카테고리</label>
+                <select id="category_idx" name="category_idx" style="width: 103%;" required>
+                    <?php foreach ($categories as $category): ?>
+                        <option value="<?= htmlspecialchars($category->category_idx) ?>"><?= htmlspecialchars($category->category_name) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group">
                 <label for="b_content">내용</label>
-                <textarea id="b_content" name="b_content" placeholder="내용을 입력하세요" required></textarea>
+                <textarea id="b_content" name="b_content" placeholder="내용을 입력하세요" style="height: 200px;" required></textarea>
             </div>
             <div class="button-group">
                 <a href="/board/board_list" class="cancel-btn">취소</a>
