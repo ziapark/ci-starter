@@ -4,6 +4,7 @@
             parent::__construct();
             $this->load->model('Board_model');
             $this->load->model('Comment_model');
+            $this->load->model('Category_model');
         }
 
         //게시판 목록
@@ -30,10 +31,16 @@
             $offset = ($current_page - 1) * $limit_per_page;    //게시글 시작
 
             $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';   //검색키워드
-            if ($keyword !== '') {
-                $data['board'] = $this->Board_model->search($keyword, $limit_per_page, $offset);
+            if($keyword !== '') {
+                $current_category = isset($_GET['category_idx']) ? trim($_GET['category_idx']) : 'all';
+                $data['board'] = $this->Board_model->search($keyword, $limit_per_page, $offset, $current_category);       
             } else {
-                $data['board'] = $this->Board_model->get_board_list($limit_per_page, $offset);
+                $current_category = isset($_GET['category_idx']) ? trim($_GET['category_idx']) : 'all';
+                if($current_category != 'all'){
+                    $data['board'] = $this->Board_model->get_board_list_category($limit_per_page, $offset, $current_category);
+                }else{
+                    $data['board'] = $this->Board_model->get_board_list($limit_per_page, $offset);
+                }
             }
 
             $data['total_pages'] = $total_pages;
@@ -45,6 +52,10 @@
             $data['next'] = $next;
             $data['keyword'] = $keyword;
             
+            //카테고리 종류
+            $data['categories'] = $this->Category_model->get_category_list();
+            $data['current_category'] = $current_category;
+
             $this->load->view('board_list_view', $data);            
         }
 
@@ -57,7 +68,11 @@
             }
             
             $u_id = $this->Board_model->get_user_id($u_num);
-            $this->load->view('board_insert_view', ['u_num' => $u_num, 'u_id' => $u_id]);
+            $data['u_num'] = $u_num;
+            $data['u_id'] = $u_id;
+            $data['categories'] = $this->Category_model->get_category_list();
+
+            $this->load->view('board_insert_view', $data);
         }
 
         //게시글 작성
@@ -65,8 +80,9 @@
             $u_num = $_POST['u_num'];
             $b_title = $_POST['b_title'];
             $b_content = $_POST['b_content'];
+            $category_idx = $_POST['category_idx'];
 
-            $data = $this->Board_model->insert_board($u_num, $b_title, $b_content);
+            $data = $this->Board_model->insert_board($u_num, $b_title, $b_content, $category_idx);
             redirect('board/board_list');
         }
 
@@ -92,6 +108,8 @@
         //게시글 수정 폼
         public function update_view($b_num){
             $data['board'] = $this->Board_model->get_board_detail($b_num);
+            $data['categories'] = $this->Category_model->get_category_list();
+
             $this->load->view('board_update_view', $data);
         }
         
@@ -100,8 +118,9 @@
             $b_num = $_POST['b_num'];
             $b_title = $_POST['b_title'];
             $b_content = $_POST['b_content'];
+            $category_idx = $_POST['category_idx'];
 
-            $data = $this->Board_model->update($b_num, $b_title, $b_content);
+            $data = $this->Board_model->update($b_num, $b_title, $b_content, $category_idx);
             redirect('board/board_list');
         }
 
