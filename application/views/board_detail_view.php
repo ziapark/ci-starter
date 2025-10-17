@@ -98,11 +98,12 @@
 
         <script>
             //댓글 작성
-            $('#first_comment_form').on('submit', function(e){
+            $(document).on('submit', '.comment-form', function(e){
                 e.preventDefault();
 
-                const b_num = $('#b_num').val();
-                const c_content = $('#c_content').val().trim();
+                const form = $(this);
+                const b_num = form.find('input[name="b_num"]').val();
+                const c_content = form.find('textarea[name="c_content"]').val().trim();
 
                 submit_comment_ajax(b_num, c_content, 0, 0);
             });
@@ -110,6 +111,7 @@
             //답글 작성
             $(document).on('submit', '.reply-form', function(e){
                 e.preventDefault();
+
                 const form = $(this);
                 const b_num = form.find('input[name="b_num"]').val();
                 const c_content = form.find('textarea[name="c_content"]').val().trim();
