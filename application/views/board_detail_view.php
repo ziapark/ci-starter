@@ -40,7 +40,7 @@
         <!-- 게시글 정보 -->
         <div class="detail-title"><?= htmlspecialchars($board->b_title) ?></div>
         <div class="detail-meta">
-            작성자: <?= htmlspecialchars($board->u_id) ?> | 작성일: <?= date('Y-m-d', strtotime($board->b_date)) ?>
+            작성자: <?= htmlspecialchars($board->u_id) ?> | 카테고리: <?= htmlspecialchars($board->category_name) ?> | 작성일: <?= date('Y-m-d', strtotime($board->b_date)) ?>
         </div>
         <div class="detail-content">
             <?= nl2br(htmlspecialchars($board->b_content)) ?>
@@ -77,8 +77,6 @@
 
                         <!-- 답글 출력 -->
                         <div id="reply_list_display_<?= $comment->c_num ?>" class="reply-list" style="display:none;"></div>
-
-
                         
                     </div>
                 <?php endforeach; ?>
