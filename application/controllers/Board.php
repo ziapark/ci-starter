@@ -107,6 +107,11 @@
 
         //게시글 수정 폼
         public function update_view($b_num){
+            $limit_per_page = isset($_GET['limit_per_page']) && is_numeric($_GET['limit_per_page']) ? (int)$_GET['limit_per_page'] : 10; 
+            $data['limit_per_page'] = $limit_per_page;
+            $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
+            $data['keyword'] = $keyword;
+
             $data['board'] = $this->Board_model->get_board_detail($b_num);
             $data['categories'] = $this->Category_model->get_category_list();
 

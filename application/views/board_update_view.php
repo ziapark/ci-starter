@@ -47,7 +47,7 @@
                 <textarea id="b_content" name="b_content" style="height: 200px;" required><?= htmlspecialchars($board->b_content) ?></textarea>
             </div>
             <div class="button-group">
-                <a href="/board/board_list" class="cancel-btn">취소</a>
+                <a href="/board/board_detail/<?php echo $board->b_num; ?>?limit_per_page=<?= $limit_per_page ?>&keyword=<?= $keyword ?>" class="cancel-btn">취소</a>
                 <button type="submit" class="submit-btn">수정</button>
             </div>
         </form>

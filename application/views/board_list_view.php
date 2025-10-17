@@ -44,12 +44,12 @@
         <div class="right-action">
             <button class="write-button" onclick="add()">글쓰기</button>
             <?php
-            if(isset($_SESSION) === false) {session_start();}
-            if(isset($_SESSION['u_num']) === false){
+                if(isset($_SESSION) === false) {session_start();}
+                if(isset($_SESSION['u_num']) === false){
             ?>
-            <a class="login-button" href="/user/view/login">로그인</a>
+                    <a class="login-button" href="/user/view/login">로그인</a>
             <?php }else{ ?>
-            <a class="login-button" href="/user/logout">로그아웃</a>
+                    <a class="login-button" href="/user/logout">로그아웃</a>
             <?php } ?>  
         </div>
     </div>

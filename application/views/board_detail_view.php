@@ -226,7 +226,7 @@
                 if (!is_null($login_u_num) && $login_u_num == $board->u_num):
             ?>
                 <div class="button-group">
-                    <a class="edit-btn" href="/board/update_view/<?= htmlspecialchars($board->b_num) ?>">수정</a>
+                    <a class="edit-btn" href="/board/update_view/<?= htmlspecialchars($board->b_num) ?>?limit_per_page=<?= $limit_per_page ?>&keyword=<?= $keyword ?>">수정</a>
                     <a class="delete-btn" href="/board/delete/<?= htmlspecialchars($board->b_num) ?>">삭제</a>
                 </div>
             <?php endif; ?>

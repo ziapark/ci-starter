@@ -14,6 +14,15 @@
             }       
         }
 
+        //아이디 중복 검사
+        public function check_id(){
+            $u_id = $_POST['u_id'];
+            
+            $exists = $this->User_model->is_id_exists($u_id);
+
+            echo json_encode(['exists' => $exists]);
+        }
+        
         //회원가입
         public function sign(){
             $u_id = $_POST['u_id'];
