@@ -93,8 +93,37 @@
             $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
             $data['keyword'] = $keyword;
 
+            $limit_comment = 5;
+            $total_rows = $this->Comment_model->count_all_comments($b_num);
+
+            $current_page = isset($_GET['current_page']) && is_numeric($_GET['current_page']) && $_GET['current_page'] > 0 ? (int)$_GET['current_page'] : 1;
+            $total_pages = ceil($total_rows / $limit_comment);
+            
+            $limit_page = 5;
+            $end_page = ceil($current_page/$limit_page) * $limit_page;
+            if($total_pages < $end_page){
+                $end_page = $total_pages;
+            }
+
+            $start_page = ($end_page - $limit_page) + 1;
+            if($start_page < 1){
+                $start_page = 1;
+            }
+
+            $prev = ($current_page == 1) ? false : true;
+            $next = ($current_page == $total_pages || $total_pages == 0) ? false : true;
+
+            $offset = ($current_page - 1) * $limit_comment;
+
+            $data['total_pages'] = $total_pages;
+            $data['current_page'] = $current_page;
+            $data['start_page'] = $start_page;
+            $data['end_page'] = $end_page;
+            $data['prev'] = $prev;
+            $data['next'] = $next;            
+
             $data['board'] = $this->Board_model->get_board_detail($b_num);
-            $data['comments'] = $this->Comment_model->get_comments($b_num);
+            $data['comments'] = $this->Comment_model->get_comments($b_num, $limit_comment, $offset);
 
             $this->load->view('board_detail_view', $data);
         }

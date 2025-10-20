@@ -13,14 +13,15 @@
         }
 
         //최상위 댓글 정보
-        public function get_comments($b_num){
+        public function get_comments($b_num, $limit_comment, $offset){
             $query = $this->db->query('
                 select comment.*, user.u_id
                 from comment
                 join user on comment.u_num = user.u_num
                 where comment.b_num = ? and comment.c_depth = 0
-                order by comment.c_date desc;
-            ', [$b_num]);
+                order by comment.c_date desc
+                limit ? offset ?;
+            ', [$b_num, $limit_comment, $offset]);
 
             $result = $query->result();
             return $result;
@@ -38,6 +39,17 @@
 
             $result = $query->result();
             return $result;
-        }   
+        }
+
+        //최상위 댓글 개수
+        public function count_all_comments($b_num){
+            $query = $this->db->query('
+                select count(*) as cnt
+                from comment
+                where b_num = ? and c_depth = 0;
+            ', [$b_num]);
+
+            return $query->row()->cnt;
+        }
     }
 ?>

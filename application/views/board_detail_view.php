@@ -33,6 +33,10 @@
         .reply-form button:hover, .comment-form button:hover {background-color: #0056b3;} 
         .login-comment-info {color: #888; margin-top: 20px;}
         .reply-list {border-top: 1px dashed #bbb; margin-top: 15px; padding-top: 10px;}
+        .pagination {display: flex;justify-content: center;margin-top: 30px;gap: 8px;flex-wrap: wrap;}
+        .pagination a {display: inline-block;padding: 8px 12px;font-size: 14px;color: #007bff;background-color: #f1f1f1;border-radius: 5px;text-decoration: none;transition: all 0.2s ease-in-out;border: 1px solid #ccc;}
+        .pagination a:hover {background-color: #e2e6ea;color: #0056b3;}
+        .pagination a.active {background-color: #007bff;color: white;pointer-events: none;font-weight: bold;border-color: #007bff;}
     </style>
 </head>
 <body>
@@ -51,7 +55,7 @@
         <h3>댓글</h3>
         <div id="comment-list">
             <?php if (!empty($comments)): ?>
-                <?php foreach ($comments as $comment): ?>
+                <?php foreach (array_reverse($comments) as $comment): ?>
                     <div class="comment">
                         <div class="comment-header">
                             <strong><?= htmlspecialchars($comment->u_id) ?></strong>
@@ -95,6 +99,25 @@
         <?php else: ?>
             <textarea name="c_content" rows="3" placeholder="댓글을 작성하려면 로그인이 필요합니다." disabled></textarea>
         <?php endif; ?>
+
+        <!-- 댓글 페이징 -->
+        <div class="pagination">
+            <?php if($prev): ?>
+                <a href="/board/board_detail/<?= $board->b_num ?>?current_page=<?= ($current_page - 1 ) ?>">이전</a>
+            <?php endif; ?>
+
+            <?php for($i = $start_page; $i <= $end_page; $i++): ?>
+                <?php if($i == $current_page): ?>
+                    <a href="#" class="active"><?= $i ?></a>
+                <?php else: ?>
+                    <a href="/board/board_detail/<?= $board->b_num ?>?current_page=<?= $i ?>"><?= $i ?></a>
+                <?php endif; ?>
+            <?php endfor; ?>
+
+            <?php if($next): ?>
+                <a href="/board/board_detail/<?= $board->b_num ?>?current_page=<?= ($current_page + 1 ) ?>">다음</a>
+            <?php endif; ?>
+        </div>
 
         <script>
             //댓글 작성
