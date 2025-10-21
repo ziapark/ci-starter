@@ -46,7 +46,7 @@ class post_controller
             $this->ci->template_->viewPrint('layout');
 
         } else {
-            $this->ci->output->enable_profiler(false);
+            //$this->ci->output->enable_profiler(false);
         }
     }
 
