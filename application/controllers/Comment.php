@@ -1,5 +1,5 @@
 <?php
-    class Comment extends CI_Controller{
+    class Comment extends MY_Controller{
         public function __construct(){
             parent::__construct();
 
@@ -23,30 +23,11 @@
             $new_comment_id = $this->Comment_model->insert_comment($b_num, $c_content, $u_num, $c_depth, $c_parent);
         
             if ($new_comment_id) {
-                $cache_id = 'comments_for_board_'.$b_num;
-                $this->cache->delete($cache_id);
+                $this->cache->delete('comment_count_for_board_'.$b_num);
 
                 echo json_encode(['success' => true]);
             } else {
                 echo json_encode(['success' => false, 'message' => '댓글 등록에 실패했습니다']);
-            }
-        }
-
-        //답글 보기
-        public function reply_list(){
-            $b_num = $_POST['b_num'];
-            $p_num = $_POST['p_num'];
-            $b_depth = $_POST['b_depth'];
-
-            $reply_list = $this->Comment_model->get_reply_list($b_num, $p_num, $b_depth);
-            
-            if (!empty($reply_list)) {
-                echo json_encode([
-                    'success' => true,
-                    'reply_list' => $reply_list
-                ]);
-            } else {
-                echo json_encode(['success' => false, 'message' => '답글이 없습니다.']);
             }
         }
 
@@ -62,8 +43,7 @@
             $delete_success = $this->Comment_model->delete_comment($c_num);
 
             if($delete_success){
-                $cache_id = 'comments_for_board_'.$b_num;
-                $this->cache->delete($cache_id);
+                $this->cache->delete('comment_count_for_board_'.$b_num);
 
                 echo json_encode(['success' => true]);
             }else{

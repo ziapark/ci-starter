@@ -1,12 +1,9 @@
 <?php
-    class Board extends CI_Controller{
+    defined('BASEPATH') OR exit('No direct script access allowed');
+
+    class Board extends MY_Controller{
         public function __construct(){
             parent::__construct();
-            $this->load->model('Board_model');
-            $this->load->model('Comment_model');
-            $this->load->model('Category_model');
-
-            $this->output->enable_profiler(true);
         }
 
         //게시판 목록
@@ -93,25 +90,48 @@
             $limit_per_page = isset($_GET['limit_per_page']) && is_numeric($_GET['limit_per_page']) ? (int)$_GET['limit_per_page'] : 10;        
             $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
 
+            $this->load->driver('cache', array('adapter' => 'file'));
+
+            $comment_per_page = 15; // 한 페이지에 15개씩
+            $comment_limit_page = 5; // 하단에 페이지 번호 5개씩
+            $comment_current_page = $this->input->get('comment_current_page', TRUE) ? (int)$this->input->get('comment_current_page', TRUE) : 1;
+
+            $cache_id = 'comment_count_for_board_'.$b_num;
+            $comments_ttl = 3600;
+
+            $total_comment_rows = $this->cache->get($cache_id);
+            if(!$total_comment_rows){
+                $total_comment_rows = $this->Comment_model->count_comments_by_board($b_num);
+                $this->cache->save($cache_id, $total_comment_rows, $comments_ttl);
+            }
+
+            $comment_offset = ($comment_current_page - 1) * $comment_per_page;
+            $total_comment_pages = ceil($total_comment_rows / $comment_per_page); 
+    
+            $end_page = ceil($comment_current_page / $comment_limit_page) * $comment_limit_page;
+            if($total_comment_pages < $end_page){
+                $end_page = $total_comment_pages;
+            }
+            
+            $start_page = ($end_page - $comment_limit_page) + 1;
+            if($start_page < 1){
+                $start_page = 1;
+            }
+
+            $prev = ($comment_current_page == 1) ? false : true;
+            $next = ($comment_current_page == $total_comment_pages) ? false : true;
+            
+            $data['comment_total_pages'] = $total_comment_pages;
+            $data['comment_current_page'] = $comment_current_page;
+            $data['comment_start_page'] = $start_page;
+            $data['comment_end_page'] = $end_page;
+            $data['comment_prev'] = $prev;
+            $data['comment_next'] = $next;
+            $data['comments'] = $this->Comment_model->get_comments($b_num, $comment_per_page, $comment_offset);
             $data['limit_per_page'] = $limit_per_page;
             $data['keyword'] = $keyword;         
             $data['board'] = $this->Board_model->get_board_detail($b_num);
-            
 
-            $this->load->driver('cache', array('adapter' => 'file'));
-
-            $cache_id = 'comments_for_board_'.$b_num;
-            $comments_ttl = 3600;
-             
-            if(!$comments = $this->cache->get($cache_id)){
-                $comments = $this->Comment_model->get_comments($b_num);
-
-                $this->cache->save($cache_id, $comments, $comments_ttl);
-            }else{
-                
-            }
-
-            $data['comments'] = $comments;
             $this->load->view('board_detail_view', $data);
         }
 

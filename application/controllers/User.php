@@ -1,8 +1,8 @@
 <?php
-    class User extends CI_Controller{
+    class User extends MY_Controller{
         public function __construct(){
             parent::__construct();
-            $this->load->model('User_model');
+
         }
 
         //화면출력

@@ -44,8 +44,16 @@
             return $new_comment_id;
         }
 
+        //총 댓글 개수
+        public function count_comments_by_board($b_num){
+            $this->db->where('b_num', $b_num);
+            $this->db->from('comment');
+
+            return $this->db->count_all_results();
+        }
+
         //댓글 정보
-        public function get_comments($b_num){
+        public function get_comments($b_num, $limit, $offset){
             $query = $this->db->query('
                 select c.*, u.u_id
                 from comment c
@@ -53,7 +61,8 @@
                 on c.u_num = u.u_num
                 where c.b_num = ?
                 order by c.sort_path
-            ', [$b_num]);
+                limit ? offset ?
+            ', [$b_num, $limit, $offset]);
 
             $result = $query->result();
             return $result;

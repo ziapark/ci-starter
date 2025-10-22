@@ -36,6 +36,11 @@
         .reply-form button, .comment-form button {margin-top: 5px; background-color: #007bff; color: white; border: none; padding: 8px 14px; border-radius: 4px; cursor: pointer;} 
         .reply-form button:hover, .comment-form button:hover {background-color: #0056b3;} 
         .login-comment-info {color: #888; margin-top: 20px;}
+
+        .pagination-container{justify-content: space-between; align-items: center; margin-top: 30px;}
+        .pagination {display: flex; justify-content: center; gap: 8px; flex: 1; padding-left: 0;}
+        .pagination a {padding: 8px 12px;background-color: #eee;border-radius: 4px;color: #333;text-decoration: none;font-size: 14px;}
+        .pagination a.active {background-color: #007BFF;color: white;}
     </style>
 </head>
 <body>
@@ -59,16 +64,12 @@
             <?php if (!empty($comments)): ?>
                 <?php foreach ($comments as $index => $comment): ?>
                     <?php
-                        if ($comment->c_depth == 0) {
-                            if ($index > 0) {
-                                echo '</div> ';
-                            }
-                            
-                            $colorIndex = ($comment->c_num % $colorCount);
-                            $bgColor = $groupColors[$colorIndex];
-                            $borderColor = $groupBorders[$colorIndex];
+                        if ($index == 0) {
                             echo "<div class='comment-thread'>";
-                        }
+                        }else if ($comment->c_depth == 0) { 
+                        echo '</div>';
+                        echo "<div class='comment-thread'>";
+                    }
                     ?>
 
                     <div id="comment_<?= $comment->c_num ?>" 
@@ -124,23 +125,27 @@
             <textarea name="c_content" rows="3" placeholder="댓글을 작성하려면 로그인이 필요합니다." disabled></textarea>
         <?php endif; ?>
         
-        <!-- <div>
-            <?php if($prev): ?>
-                <a href="/board/board_detail?current_page<?= ($current_page - 1)?>">이전</a>
-            <?php endif; ?>
+        <div class="pagination-container">
+            <div style="flex: 1;"></div>
 
-            <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
-                <?php if($i == $current_page): ?>
-                    <a href="#" class="active"><?= $i ?></a>
-                <?php else: ?>
-                    <a href="/board/board_detail/current_page=<?= $i ?>"><?= $i ?></a>
+            <div class="pagination">
+                <?php if($comment_prev): ?>
+                    <a style="background-color: ##dfdfdf;" href="/board/board_detail/<?= $board->b_num ?>?limit_per_page=<?= $limit_per_page ?>&keyword=<?= $keyword ?>&comment_current_page<?= ($comment_current_page - 1)?>">이전</a>
                 <?php endif; ?>
-            <?php endfor; ?>
 
-            <?php if($prev): ?>
-                <a href="/board/board_detail?current_page<?= ($current_page + 1)?>">다음</a>
-            <?php endif; ?>
-        </div> -->
+                <?php for ($i = $comment_start_page; $i <= $comment_end_page; $i++): ?>
+                    <?php if($i == $comment_current_page): ?>
+                        <a href="#" class="active"><?= $i ?></a>
+                    <?php else: ?>
+                        <a href="/board/board_detail/<?= $board->b_num ?>?limit_per_page=<?= $limit_per_page ?>&keyword=<?= $keyword ?>&comment_current_page=<?= $i ?>"><?= $i ?></a>
+                    <?php endif; ?>
+                <?php endfor; ?>
+
+                <?php if($comment_next): ?>
+                    <a style="background-color: ##dfdfdf;" href="/board/board_detail/<?= $board->b_num ?>?limit_per_page=<?= $limit_per_page ?>&keyword=<?= $keyword ?>&comment_current_page=<?= ($comment_current_page + 1)?>">다음</a>
+                <?php endif; ?>
+            </div>
+        </div>
 
         <script>
             const isLoggedIn = <?= $this->session->userdata('u_num') ? 'true' : 'false' ?>;
