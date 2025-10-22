@@ -123,6 +123,24 @@
         <?php else: ?>
             <textarea name="c_content" rows="3" placeholder="댓글을 작성하려면 로그인이 필요합니다." disabled></textarea>
         <?php endif; ?>
+        
+        <!-- <div>
+            <?php if($prev): ?>
+                <a href="/board/board_detail?current_page<?= ($current_page - 1)?>">이전</a>
+            <?php endif; ?>
+
+            <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
+                <?php if($i == $current_page): ?>
+                    <a href="#" class="active"><?= $i ?></a>
+                <?php else: ?>
+                    <a href="/board/board_detail/current_page=<?= $i ?>"><?= $i ?></a>
+                <?php endif; ?>
+            <?php endfor; ?>
+
+            <?php if($prev): ?>
+                <a href="/board/board_detail?current_page<?= ($current_page + 1)?>">다음</a>
+            <?php endif; ?>
+        </div> -->
 
         <script>
             const isLoggedIn = <?= $this->session->userdata('u_num') ? 'true' : 'false' ?>;
@@ -191,12 +209,17 @@
                         dataType: 'json',
                         data: {c_num: c_num},
                         success: function(data){
+
                             if(data.success){
                                 alert('댓글이 삭제되었습니다.');
                                 location.reload();
                             }else{
                                 alert(data.message);
                             }
+                        },
+                        error: function(error){
+                            console.log( error);
+                        
                         }
                     });
                 }

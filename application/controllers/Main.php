@@ -7,6 +7,8 @@ class Main extends MY_Controller
     {
         parent::__construct();
         $this->load->database();
+
+        
     }
 
     public function index()

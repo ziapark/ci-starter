@@ -2,6 +2,8 @@
     class Comment extends CI_Controller{
         public function __construct(){
             parent::__construct();
+
+            $this->load->driver('cache', array('adapter' => 'file'));
             $this->load->model('Board_model');
             $this->load->model('Comment_model');
         }
@@ -19,14 +21,12 @@
             }
 
             $new_comment_id = $this->Comment_model->insert_comment($b_num, $c_content, $u_num, $c_depth, $c_parent);
-            
         
             if ($new_comment_id) {
-                $new_comment_data = $this->Comment_model->get_comment_by_id($new_comment_id);
-                echo json_encode([
-                    'success' => true,
-                    'new_comment' => $new_comment_data
-                ]);
+                $cache_id = 'comments_for_board_'.$b_num;
+                $this->cache->delete($cache_id);
+
+                echo json_encode(['success' => true]);
             } else {
                 echo json_encode(['success' => false, 'message' => '댓글 등록에 실패했습니다']);
             }
@@ -43,8 +43,6 @@
             if (!empty($reply_list)) {
                 echo json_encode([
                     'success' => true,
-
-
                     'reply_list' => $reply_list
                 ]);
             } else {
@@ -52,12 +50,21 @@
             }
         }
 
-        //댓글 삭제
+        //댓글, 답글 삭제
         public function delete_comment(){
             $c_num = $_POST['c_num'];
-            $result = $this->Comment_model->delete_comment($c_num);
+            $b_num = $this->Comment_model->get_b_num_by_c_num($c_num);
+            if(!$b_num){
+                echo json_encode(['success' => false, 'message' => '댓글 삭제에 실패했습니다.']);
+                return ;
+            }
 
-            if($result){
+            $delete_success = $this->Comment_model->delete_comment($c_num);
+
+            if($delete_success){
+                $cache_id = 'comments_for_board_'.$b_num;
+                $this->cache->delete($cache_id);
+
                 echo json_encode(['success' => true]);
             }else{
                 echo json_encode(['success' => false, 'message' => '댓글 삭제에 실패했습니다.']);

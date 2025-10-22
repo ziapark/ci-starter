@@ -5,6 +5,8 @@
             $this->load->model('Board_model');
             $this->load->model('Comment_model');
             $this->load->model('Category_model');
+
+            $this->output->enable_profiler(true);
         }
 
         //게시판 목록
@@ -94,8 +96,22 @@
             $data['limit_per_page'] = $limit_per_page;
             $data['keyword'] = $keyword;         
             $data['board'] = $this->Board_model->get_board_detail($b_num);
-            $data['comments'] = $this->Comment_model->get_comments($b_num);
+            
 
+            $this->load->driver('cache', array('adapter' => 'file'));
+
+            $cache_id = 'comments_for_board_'.$b_num;
+            $comments_ttl = 3600;
+             
+            if(!$comments = $this->cache->get($cache_id)){
+                $comments = $this->Comment_model->get_comments($b_num);
+
+                $this->cache->save($cache_id, $comments, $comments_ttl);
+            }else{
+                
+            }
+
+            $data['comments'] = $comments;
             $this->load->view('board_detail_view', $data);
         }
 
