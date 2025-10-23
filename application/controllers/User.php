@@ -34,8 +34,13 @@
             $u_pw = $_POST['u_pw'];
             $u_name = $_POST['u_name'];
 
+            $this->optimizer->setCss('../assets/css/user.css');
+            $optimizer_tags = $this->optimizer->makeOptimizerScriptTag();
+
+            $data['css_optimizer'] = $optimizer_tags['css_optimizer'];
+
             $data['user'] = $this->User_model->sign($u_id, $u_pw, $u_name);
-            $this->load->view('user_login_view');
+            $this->load->view('user_login_view', $data);
         }
 
         //로그인
