@@ -43,6 +43,11 @@
                 }
             }
 
+            $this->optimizer->setCss('../assets/css/board.css');
+            $optimizer_tags = $this->optimizer->makeOptimizerScriptTag();
+
+            $data['css_optimizer'] = $optimizer_tags['css_optimizer'];
+            
             $data['total_pages'] = $pagination['total_pages'];
             $data['current_page'] = $pagination['current_page'];
             $data['start_page'] = $pagination['start_page'];
@@ -72,6 +77,11 @@
             $data['u_num'] = $u_num;
             $data['u_id'] = $u_id;
             $data['categories'] = $this->Category_model->get_category_list();
+
+            $this->optimizer->setCss('../assets/css/board.css');
+            $optimizer_tags = $this->optimizer->makeOptimizerScriptTag();
+
+            $data['css_optimizer'] = $optimizer_tags['css_optimizer'];
 
             $this->load->view('board_insert_view', $data);
         }
@@ -116,6 +126,11 @@
                 $comment_limit_page
             );
             
+            $this->optimizer->setCss('../assets/css/board.css');
+            $optimizer_tags = $this->optimizer->makeOptimizerScriptTag();
+
+            $data['css_optimizer'] = $optimizer_tags['css_optimizer'];
+
             $data['comment_total_pages'] = $pagination['total_pages'];
             $data['comment_current_page'] = $pagination['current_page'];
             $data['comment_start_page'] = $pagination['start_page'];
@@ -147,6 +162,11 @@
 
             $data['board'] = $this->Board_model->get_board_detail($b_num);
             $data['categories'] = $this->Category_model->get_category_list();
+
+            $this->optimizer->setCss('../assets/css/board.css');
+            $optimizer_tags = $this->optimizer->makeOptimizerScriptTag();
+
+            $data['css_optimizer'] = $optimizer_tags['css_optimizer'];
 
             $this->load->view('board_update_view', $data);
         }

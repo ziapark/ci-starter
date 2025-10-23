@@ -5,20 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>회원가입</title>
-    <style>
-        body {display: flex;justify-content: center;height: 100vh;margin: 0;}
-        .signup-container {background-color: white;padding: 40px 30px;border-radius: 10px;width: 100%;max-width: 450px;}
-        .signup-container h2 {text-align: center;margin-bottom: 30px;color: #333;}
-        .form-group {margin-bottom: 20px;} 
-        .form-group label {display: block;margin-bottom: 8px;font-weight: bold;color: #555;}
-        .form-group input {width: 94%;padding: 10px 12px;font-size: 14px;border: 1px solid #ccc;border-radius: 6px;}
-        .signup-button {width: 100%;padding: 12px;background-color: #28a745;border: none;color: white;font-size: 16px;border-radius: 6px;cursor: pointer;}
-        .signup-button:hover {background-color: #218838;}
-        .extra-links {text-align: center;margin-top: 15px;}
-        .extra-links a {color: #6c6f74ff;text-decoration: none;font-size: 14px;}
-        .check-button {padding: 10px 12px;background-color: #007bff;border: none;color: white;border-radius: 6px;cursor: pointer;font-size: 14px;}
-        .check-button:hover {background-color: #0056b3;}
-    </style>
+    <?php echo $css_optimizer; ?>
 </head>
 <body>
     <script>

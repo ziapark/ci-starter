@@ -7,41 +7,8 @@
     <title>게시글 상세보기</title>
     <style>
         body {margin: 0;padding: 40px 20px;display: flex;justify-content: center;}
-        .detail-container {padding: 30px;border-radius: 10px;width: 100%;max-width: 800px;}
-        .detail-title {font-size: 24px;font-weight: bold;margin-bottom: 10px;color: #333;}
-        .detail-meta {font-size: 14px;color: #666;margin-bottom: 20px;border-bottom: 1px solid #ddd;padding-bottom: 10px;}
-        .detail-content {font-size: 16px;line-height: 1.6;color: #444;white-space: pre-line;margin-bottom: 30px;}
-        .button-group {display: flex;justify-content: flex-end;gap: 10px;}
-        .button-group a {padding: 10px 16px;font-size: 14px;border: none;border-radius: 6px;cursor: pointer;text-decoration-line: none;}
-        .edit-btn {background-color: #28a745;color: white;}
-        .edit-btn:hover {background-color: #218838;}
-        .delete-btn {background-color: #dc3545;color: white;}
-        .delete-btn:hover {background-color: #c82333;}
-        .list-btn {background-color: #6c757d;color: white;}
-        .list-btn:hover {background-color: #495057;}
-        hr {margin: 40px 0 20px; background: #ddd; height:1px; border:0;}
-       
-        .comment-thread {border: 1px solid #e0e0e0;border-radius: 8px;margin-bottom: 15px;overflow: hidden;}
-        #comment-list {margin-top: 20px;} 
-        .comment {padding: 10px;}
-        .comment-thread .comment:last-child {border-bottom: none; border-radius: 0 0 0 15px;}
-        .comment.reply {border-left: 2px dashed #ccc;border-radius: 0 0 0 15px; }
-        .comment-header {font-size: 14px; color: #555;display: flex;align-items: center;} 
-        .comment p {font-size: 15px; color: #333;margin-top:3px;}
-        .reply-action-group {display: flex;gap: 6px;align-items: center;margin-left: auto;}
-        .reply-toggle-btn {background: none; color: #007bff; border: none; font-size: 13px; cursor: pointer; padding: 0;} 
-        .reply-toggle-btn:hover {text-decoration: underline;}
-        .reply-form, .comment-form {margin-top: 10px;} 
-        .reply-form textarea, .comment-form textarea, textarea {width: 97%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;} 
-        .reply-form button, .comment-form button {margin-top: 5px; background-color: #007bff; color: white; border: none; padding: 8px 14px; border-radius: 4px; cursor: pointer;} 
-        .reply-form button:hover, .comment-form button:hover {background-color: #0056b3;} 
-        .login-comment-info {color: #888; margin-top: 20px;}
-
-        .pagination-container{justify-content: space-between; align-items: center; margin-top: 30px;}
-        .pagination {display: flex; justify-content: center; gap: 8px; flex: 1; padding-left: 0;}
-        .pagination a {padding: 8px 12px;background-color: #eee;border-radius: 4px;color: #333;text-decoration: none;font-size: 14px;}
-        .pagination a.active {background-color: #007BFF;color: white;}
     </style>
+    <?php echo $css_optimizer; ?>
 </head>
 <body>
     <div class="detail-container">
@@ -126,7 +93,7 @@
         <?php endif; ?>
         
         <div class="pagination-container">
-            <div style="flex: 1;"></div>
+            <div style="flex:0.4;"></div>
 
             <div class="pagination">
                 <?php if($comment_prev): ?>

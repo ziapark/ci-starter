@@ -5,33 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <title>게시판</title>
-    <style>
-        body {background-color: #f9f9f9;padding: 40px;}
-        h1 {text-align: center;color: #333;margin-bottom: 30px;}
-        .action-bar {display: flex;justify-content: space-between;align-items: center;margin-bottom: 20px;}
-        .search-box input[type="text"] {padding: 8px 12px;font-size: 14px;border: 1px solid #ccc;border-radius: 4px;width: 200px;}
-        .limit-box {display: flex;align-items: center;gap: 8px;}
-        .limit-box input[type="text"] {padding: 8px 12px;font-size: 14px;border: 1px solid #ccc;border-radius: 4px;width: 200px;}
-        .write-button{padding: 8px 16px;font-size: 14px;text-decoration: none;background-color: #007BFF;color: white;border: none;border-radius: 4px;cursor: pointer;}
-        .write-button:hover{background-color: #0056b3;}
-        table {width: 100%;border-collapse: collapse;background-color: white;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);}
-        thead {background-color: #007BFF;color: white;}
-        th, td {padding: 12px 16px;border-bottom: 1px solid #ddd;text-align: center;}
-        tbody tr:hover {background-color: #f1f1f1;}
-        a {color: #007BFF;text-decoration: none;}
-        .pagination-container{display: flex; justify-content: space-between; align-items: center; margin-top: 30px;}
-        .pagination {display: flex; justify-content: left; gap: 8px; flex: 1; padding-left: 200px;}
-        .pagination a {padding: 8px 12px;background-color: #eee;border-radius: 4px;color: #333;text-decoration: none;font-size: 14px;}
-        .pagination a.active {background-color: #007BFF;color: white;}
-        .right-action {display: flex;gap: 10px;}
-        .login-button {padding: 8px 16px;font-size: 14px;background-color: #28a745;color: white;border: none;border-radius: 4px;cursor: pointer;text-decoration: none;display: inline-block;text-align: center;}
-        .login-button:hover {background-color: #218838;}
-        .search-button {padding: 8px 16px;font-size: 12px;background-color: #17a2b8;color: white;border: none;border-radius: 4px;cursor: pointer;margin-left: 8px;}
-        .search-button:hover {background-color: #138496;}
-        .nav-item {border: 1px, solid, lightgray; margin: -1px 3px;border-radius: 8px 8px 0 0;}
-        .nav-item a{color: #494949ff;}
-        .nav-item:hover, .nav-item a:hover, .nav-tabs .nav-item.active {background-color: #d1d1d1ff; color: #494949ff}
-    </style>
+
+    <?php echo $css_optimizer; ?>
+    
 </head>
 <body>
     <h1>게시판</h1>
@@ -100,7 +76,7 @@
 
         <div class="pagination">
             <?php if ($prev): ?>
-                <a style="background-color: ##dfdfdf;" href="/board/board_list?current_page=<?= ($current_page - 1 )?>&limit_per_page=<?= $limit_per_page ?>">이전</a>
+                <a href="/board/board_list?current_page=<?= ($current_page - 1 )?>&limit_per_page=<?= $limit_per_page ?>">이전</a>
             <?php endif; ?>
 
             <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
@@ -112,7 +88,7 @@
             <?php endfor; ?>
         
             <?php if ($next): ?>
-                <a style="background-color: ##dfdfdf;" href="/board/board_list?current_page=<?= ($current_page + 1) ?>&limit_per_page=<?= $limit_per_page ?>">다음</a>
+                <a href="/board/board_list?current_page=<?= ($current_page + 1) ?>&limit_per_page=<?= $limit_per_page ?>">다음</a>
             <?php endif; ?>
         </div>
 

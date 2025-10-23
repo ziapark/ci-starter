@@ -2,15 +2,20 @@
     class User extends MY_Controller{
         public function __construct(){
             parent::__construct();
-
         }
 
         //화면출력
         public function view($value){
+
+            $this->optimizer->setCss('../assets/css/user.css');
+            $optimizer_tags = $this->optimizer->makeOptimizerScriptTag();
+
+            $data['css_optimizer'] = $optimizer_tags['css_optimizer'];
+
             if($value === 'login'){
-                $this->load->view('user_login_view');
+                $this->load->view('user_login_view', $data);
             }else if($value === 'sign'){
-                $this->load->view('user_sign_view');
+                $this->load->view('user_sign_view', $data);
             }       
         }
 
