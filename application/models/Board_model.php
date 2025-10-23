@@ -36,6 +36,43 @@
             return $this->db->count_all('board');
         }
 
+        //카테고리 별 게시글 수
+        public function count_boards_by_category($current_category){
+            $query = $this->db->query('
+                select count(*) as cnt
+                from board
+                where category_idx = ?
+            ', [$current_category]);
+
+            $row = $query->row();
+            return $row ? (int)$row->cnt : 0;
+        }
+
+        //키워드 검색시 결과 게시글 수
+        public function count_boards_by_keyword($keyword, $current_category){
+            $like = "%{$keyword}%";
+
+            if($current_category != 'all'){
+                $sql = "
+                    select count(*) as cnt
+                    from board
+                    where b_title like ? and category_idx = ?
+                ";
+                $params = [$like, $current_category];
+            }else{
+                $sql = "
+                    select count(*) as cnt
+                    from board
+                    where b_title like ?
+                ";
+                $params = [$like];
+            }
+
+            $query = $this->db->query($sql, $params);
+            $row = $query->row();
+            return $row ? (int)$row->cnt : 0;
+        }
+
         //사용자 아이디
         public function get_user_id($u_num){
             $query = $this->db->query('
