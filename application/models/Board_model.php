@@ -85,8 +85,8 @@
             return $row ? $row->u_id : null;
         }
 
-        //게시글 등록
-        public function insert_board($u_num, $b_title, $b_content, $category_idx){  
+        //게시글 작성
+        public function insert_board($u_num, $b_title, $b_content, $category_idx){
             $result = $this->db->query('
                 insert into board
                 (u_num, b_title, b_content, category_idx)

@@ -114,9 +114,7 @@ class MY_Controller extends CI_Controller
         $this->load->vars($aVars);
     }
 
-    /**
-     *  페이지네이션
-     */
+    //페이지네이션
     public function pagination($total_rows, $current_page, $per_page, $limit_page_links){
         
         $pagination_data = [];

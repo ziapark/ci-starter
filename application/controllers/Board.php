@@ -58,7 +58,6 @@
             $data['limit_per_page'] = $limit_per_page;
             $data['keyword'] = $keyword;
             
-            //카테고리 종류
             $data['categories'] = $this->Category_model->get_category_list();
             $data['current_category'] = $current_category;
 
